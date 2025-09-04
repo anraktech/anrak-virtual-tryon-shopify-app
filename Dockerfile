@@ -30,4 +30,4 @@ RUN npm prune --omit=dev
 EXPOSE $PORT
 
 # Start command
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+CMD ["sh", "-c", "npx prisma db push && npm start"]
