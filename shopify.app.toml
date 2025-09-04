@@ -1,8 +1,8 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 name = "anrak-virtual-tryon"
-client_id = "placeholder_will_be_replaced"
-application_url = "https://anrak-virtual-tryon.up.railway.app"
+client_id = "dc921d9d572ecf913aa1b37083ee5bf1"
+application_url = "https://anrak-virtual-tryon-shopify-app-production.up.railway.app"
 embedded = true
 
 [access_scopes]
@@ -11,8 +11,8 @@ scopes = "write_products,read_products"
 
 [auth]
 redirect_urls = [
-  "https://anrak-virtual-tryon.up.railway.app/auth/callback",
-  "https://anrak-virtual-tryon.up.railway.app/api/auth/callback"
+  "https://anrak-virtual-tryon-shopify-app-production.up.railway.app/auth/callback",
+  "https://anrak-virtual-tryon-shopify-app-production.up.railway.app/api/auth/callback"
 ]
 
 [webhooks]
@@ -26,6 +26,6 @@ automatically_update_urls_on_dev = true
 dev_store_url = "https://tryitonbyanrak.myshopify.com"
 
 [app_proxy]
-url = "https://anrak-virtual-tryon.up.railway.app"
+url = "https://anrak-virtual-tryon-shopify-app-production.up.railway.app"
 subpath = "apps"
 prefix = "anrak-try-on"

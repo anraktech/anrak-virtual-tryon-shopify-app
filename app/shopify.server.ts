@@ -1,4 +1,4 @@
-import "@shopify/shopify-app-remix/adapters/node";
+import "@shopify/shopify-app-remix/server/adapters/node";
 import {
   AppDistribution,
   DeliveryMethod,
@@ -9,11 +9,15 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = global.prisma || new PrismaClient();
+declare global {
+  var __prisma: PrismaClient | undefined;
+}
+
+const prisma = globalThis.__prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV === "development") {
-  if (!global.prisma) {
-    global.prisma = prisma;
+  if (!globalThis.__prisma) {
+    globalThis.__prisma = prisma;
   }
 }
 
@@ -34,7 +38,7 @@ const shopify = shopifyApp({
     },
   },
   hooks: {
-    afterAuth: async ({ session }) => {
+    afterAuth: async ({ session }: { session: any }) => {
       shopify.registerWebhooks({ session });
     },
   },
