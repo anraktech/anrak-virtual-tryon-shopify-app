@@ -1,0 +1,26 @@
+{
+  "ai_try_on": {
+    "button_text": "AI TRY IT ON",
+    "modal_title": "AI Virtual Try-On",
+    "upload_instruction": "Upload your photo to see how this product looks on you!",
+    "choose_photo": "Choose Photo",
+    "take_photo": "Take Photo",
+    "capture": "Capture",
+    "cancel": "Cancel",
+    "generate_try_on": "Generate Try-On",
+    "choose_different_photo": "Choose Different Photo",
+    "generating": "Generating your virtual try-on...",
+    "please_wait": "This may take a few moments",
+    "download_image": "Download Image",
+    "try_another_photo": "Try Another Photo",
+    "try_again": "Try Again",
+    "error_no_image": "No image selected. Please take or upload a photo.",
+    "error_product_info": "Product information not found.",
+    "error_product_id": "Product ID not found.",
+    "error_failed_generation": "Failed to generate try-on image.",
+    "error_network": "Network error. Please check your connection and try again.",
+    "error_camera_access": "Unable to access camera. Please check permissions or upload a photo instead.",
+    "error_invalid_file": "Please select a valid image file.",
+    "error_load_result": "Failed to load result image."
+  }
+}

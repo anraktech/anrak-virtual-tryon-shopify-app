@@ -1,0 +1,141 @@
+{% comment %}
+AI Try-On Button Block
+{% endcomment %}
+
+<div class="anrak-ai-try-on-container" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+  <button 
+    type="button" 
+    class="anrak-ai-try-on-btn"
+    onclick="openAnrakTryOnModal()"
+    {{ block.shopify_attributes }}
+  >
+    <svg class="anrak-ai-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    {{ block.settings.button_text | default: "AI TRY IT ON" }}
+  </button>
+</div>
+
+<!-- Modal HTML -->
+<div id="anrak-try-on-modal" class="anrak-modal" style="display: none;">
+  <div class="anrak-modal-content">
+    <div class="anrak-modal-header">
+      <h3>AI Virtual Try-On</h3>
+      <button type="button" class="anrak-close-btn" onclick="closeAnrakTryOnModal()">&times;</button>
+    </div>
+    
+    <div class="anrak-modal-body">
+      <div id="anrak-upload-section" class="anrak-upload-section">
+        <p>Upload your photo to see how this product looks on you!</p>
+        
+        <!-- File Upload -->
+        <div class="anrak-upload-option">
+          <label for="anrak-file-input" class="anrak-upload-label">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 15V19A2 2 0 0119 21H5A2 2 0 013 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="17,8 12,3 7,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Choose Photo
+          </label>
+          <input type="file" id="anrak-file-input" accept="image/*" style="display: none;" onchange="handleAnrakFileSelect(event)">
+        </div>
+
+        <!-- Camera Capture -->
+        <div class="anrak-upload-option">
+          <button type="button" class="anrak-camera-btn" onclick="startAnrakCamera()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23 19A2 2 0 0121 21H3A2 2 0 011 19V8A2 2 0 013 6H4L6 4H18L20 6H21A2 2 0 0123 8V19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Take Photo
+          </button>
+        </div>
+      </div>
+
+      <!-- Camera Section -->
+      <div id="anrak-camera-section" class="anrak-camera-section" style="display: none;">
+        <video id="anrak-video" autoplay></video>
+        <div class="anrak-camera-controls">
+          <button type="button" class="anrak-capture-btn" onclick="captureAnrakPhoto()">Capture</button>
+          <button type="button" class="anrak-cancel-btn" onclick="stopAnrakCamera()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Preview Section -->
+      <div id="anrak-preview-section" class="anrak-preview-section" style="display: none;">
+        <div class="anrak-image-preview">
+          <img id="anrak-preview-image" src="" alt="Preview">
+        </div>
+        <div class="anrak-preview-controls">
+          <button type="button" class="anrak-try-on-submit-btn" onclick="submitAnrakTryOn()">
+            Generate Try-On
+          </button>
+          <button type="button" class="anrak-cancel-btn" onclick="resetAnrakModal()">Choose Different Photo</button>
+        </div>
+      </div>
+
+      <!-- Loading Section -->
+      <div id="anrak-loading-section" class="anrak-loading-section" style="display: none;">
+        <div class="anrak-loading-spinner"></div>
+        <p>Generating your virtual try-on...</p>
+        <p class="anrak-loading-subtext">This may take a few moments</p>
+      </div>
+
+      <!-- Result Section -->
+      <div id="anrak-result-section" class="anrak-result-section" style="display: none;">
+        <div class="anrak-result-image">
+          <img id="anrak-result-image" src="" alt="Try-on result">
+        </div>
+        <div class="anrak-result-controls">
+          <button type="button" class="anrak-download-btn" onclick="downloadAnrakResult()">Download Image</button>
+          <button type="button" class="anrak-try-again-btn" onclick="resetAnrakModal()">Try Another Photo</button>
+        </div>
+      </div>
+
+      <!-- Error Section -->
+      <div id="anrak-error-section" class="anrak-error-section" style="display: none;">
+        <div class="anrak-error-message">
+          <p id="anrak-error-text">Something went wrong. Please try again.</p>
+        </div>
+        <button type="button" class="anrak-try-again-btn" onclick="resetAnrakModal()">Try Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "AI Try-On Button",
+  "target": "section",
+  "available_if": "{{ app.metafields.anrak.enabled }}",
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "AI TRY IT ON"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show AI Icon",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

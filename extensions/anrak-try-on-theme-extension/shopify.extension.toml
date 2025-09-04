@@ -1,0 +1,8 @@
+type = "theme"
+name = "ANRAK AI Try-On"
+
+[extensions.theme]
+
+[[extensions.theme.files]]
+template = "product"
+inject_into = "form"
